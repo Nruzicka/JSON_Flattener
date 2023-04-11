@@ -32,8 +32,12 @@ def load_flat_json(file: str) -> dict:
         return flatten_json(j_dict)
 
 #Flattens Directory of Jsons into a CSV
-def jsons_to_csv(json_dir: str, output_path: str):
-    json_files = [os.path.join(json_dir, file) for file in os.listdir(json_dir)]
+def jsons_to_csv(input_path: str, output_path: str):
+
+    if os.path.isdir(input_path):
+        json_files = [os.path.join(input_path, file) for file in os.listdir(input_path)]
+    else:
+        json_files = [input_path]
     json_dicts = list(map(load_flat_json, json_files))
     temp_csv = os.path.dirname(output_path) + '\\temp.csv'
 
@@ -58,6 +62,14 @@ def jsons_to_csv(json_dir: str, output_path: str):
         fin.write(text)
 
     os.remove(temp_csv)
+
+
+def main():
+    jsons_to_csv(sys.argv[1], sys.argv[2])
+
+
+if __name__ == "__main__":
+    main()
 
 
 
