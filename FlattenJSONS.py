@@ -29,15 +29,15 @@ def jsons_to_csv(input_path: str, output_path: str, remove_header_prefix: bool =
     if os.path.isdir(input_path):
         json_files = [os.path.join(input_path, file) for file in os.listdir(input_path)]
     else: 
-        json_files = input_path
+        json_files = [input_path]
     json_dicts = list(map(load_flat_json, json_files))
     temp_csv = '.\\temp.csv'
     headers = json_fields_to_headers(json_dicts)
 
     # Writing data
     with open(temp_csv, 'w', newline='') as fin:
-        for jd, in json_dicts:
-            csv_writer = csv.DictWriter(fin, fieldnames=headers)
+        csv_writer = csv.DictWriter(fin, fieldnames=headers)
+        for jd in json_dicts:
             csv_writer.writerow(jd)
     
     with open(temp_csv, 'r') as fout:
